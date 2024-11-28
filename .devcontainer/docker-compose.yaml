@@ -1,0 +1,31 @@
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ../app:/var/www/html:ro
+    depends_on:
+      - php-fpm
+
+  php-fpm:
+    image: php:8.2-fpm
+    container_name: php-fpm
+    volumes:
+      - ../app:/var/www/html
+      - ./php-fpm/php.ini:/usr/local/etc/php/php.ini
+    environment:
+      - PHP_FPM_LISTEN=/run/php/php-fpm.sock
+    command: ["php-fpm"]
+
+  php-cli:
+    image: php:8.2-cli
+    container_name: php-cli
+    volumes:
+      - ../app:/var/www/html
+    entrypoint: [ "tail", "-f", "/dev/null" ] # Для постоянного запуска контейнера и возможности выполнения команд внутри
+
+volumes:
+  app:
