@@ -25,15 +25,6 @@ services:
     networks:
       - internal
 
-  php-cli:
-    build:
-      context: ./.docker
-      dockerfile: ./php-fpm/Dockerfile
-    image: PhpBasics/php-cli
-    container_name: php-cli
-    volumes:
-      - ./src:/var/www/html
-
 networks:
   internal:
     driver: bridge
